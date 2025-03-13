@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>实时预览</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div id="login-container">
+        <h1>请选择登录身份</h1>
+        <div class="login-buttons">
+            <button onclick="login('husband')" class="login-btn husband-btn">老公登录</button>
+            <button onclick="login('wife')" class="login-btn wife-btn">老婆登录</button>
+        </div>
+    </div>
+    <div id="chat-container" class="container hidden">
+        <div id="chat-section" class="chat-section">
+            <h2 id="role-title"></h2>
+            <div class="chat-box" id="chat-box"></div>
+            <div class="input-area">
+                <textarea id="message-input" placeholder="请输入消息..."></textarea>
+                <button id="send-button" onclick="sendMessage()">发送</button>
+            </div>
+        </div>
+    </div>
+    <script src="/static/script.js"></script>
+</body>
+</html>
