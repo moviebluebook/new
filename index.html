@@ -3,27 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>实时预览</title>
-    <link rel="stylesheet" href="/static/style.css">
+    <title>服务器测试页面</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 0 20px;
+            background-color: #f5f5f5;
+        }
+        .status-box {
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .status {
+            font-size: 1.2em;
+            margin: 10px 0;
+        }
+        .success {
+            color: #28a745;
+        }
+        .error {
+            color: #dc3545;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
-    <div id="login-container">
-        <h1>请选择登录身份</h1>
-        <div class="login-buttons">
-            <button onclick="login('husband')" class="login-btn husband-btn">老公登录</button>
-            <button onclick="login('wife')" class="login-btn wife-btn">老婆登录</button>
-        </div>
+    <h1>服务器测试页面</h1>
+    
+    <div class="status-box">
+        <h2>基本信息</h2>
+        <div class="status">页面加载时间：<span id="loadTime"></span></div>
+        <div class="status">当前URL：<span id="currentUrl"></span></div>
     </div>
-    <div id="chat-container" class="container hidden">
-        <div id="chat-section" class="chat-section">
-            <h2 id="role-title"></h2>
-            <div class="chat-box" id="chat-box"></div>
-            <div class="input-area">
-                <textarea id="message-input" placeholder="请输入消息..."></textarea>
-                <button id="send-button" onclick="sendMessage()">发送</button>
-            </div>
-        </div>
+
+    <div class="status-box">
+        <h2>服务器连接测试</h2>
+        <button onclick="testConnection()">测试连接</button>
+        <div class="status" id="connectionStatus"></div>
     </div>
-    <script src="/static/script.js"></script>
+
+    <div class="status-box">
+        <h2>系统信息</h2>
+        <div class="status">浏览器：<span id="browserInfo"></span></div>
+        <div class="status">操作系统：<span id="osInfo"></span></div>
+        <div class="status">屏幕分辨率：<span id="screenInfo"></span></div>
+    </div>
+
+    <script>
+        // 页面加载时间
+        window.onload = function() {
+            document.getElementById('loadTime').textContent = new Date().toLocaleString();
+            document.getElementById('currentUrl').textContent = window.location.href;
+            document.getElementById('browserInfo').textContent = navigator.userAgent;
+            document.getElementById('osInfo').textContent = navigator.platform;
+            document.getElementById('screenInfo').textContent = `${window.screen.width}x${window.screen.height}`;
+        };
+
+        // 测试服务器连接
+        async function testConnection() {
+            const statusElement = document.getElementById('connectionStatus');
+            statusElement.textContent = '正在测试连接...';
+            
+            try {
+                const startTime = performance.now();
+                const response = await fetch(window.location.href);
+                const endTime = performance.now();
+                
+                if (response.ok) {
+                    const responseTime = Math.round(endTime - startTime);
+                    statusElement.textContent = `连接成功！响应时间: ${responseTime}ms`;
+                    statusElement.className = 'status success';
+                } else {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+            } catch (error) {
+                statusElement.textContent = `连接失败: ${error.message}`;
+                statusElement.className = 'status error';
+            }
+        }
+    </script>
 </body>
 </html>
